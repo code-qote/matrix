@@ -1,4 +1,4 @@
-package linealgebra
+package matrix
 
 import "errors"
 
