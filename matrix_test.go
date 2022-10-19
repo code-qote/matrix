@@ -15,15 +15,11 @@ func TestNewMatrix(t *testing.T) {
 
 func TestMatrixSetGet(t *testing.T) {
 	m, values := getMatrix[float64](2, 2)
-	_, err := m.Get(-1, 100)
-	if err == nil {
-		t.Error("error was not occurred")
-	}
 
 	k := 0
 	for i := 0; i < 2; i++ {
 		for j := 0; j < 2; j++ {
-			if val, _ := m.Get(i, j); val != values[k] {
+			if val := m.Get(i, j); val != values[k] {
 				t.Errorf("invalid value. expected %f, found %f\n", values[k], val)
 			}
 			k++
@@ -49,7 +45,7 @@ func TestMatrixMultiplicate(t *testing.T) {
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++
@@ -66,7 +62,7 @@ func TestMatrixScalarMultiplication(t *testing.T) {
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++
@@ -88,7 +84,7 @@ func TestMatrixAdd(t *testing.T) {
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++
@@ -105,7 +101,7 @@ func TestMatrixTranspose(t *testing.T) {
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++
@@ -125,7 +121,7 @@ func TestMatrixExec(t *testing.T) {
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %f, found %f\n", ans[k], val)
 			}
 			k++
@@ -145,7 +141,7 @@ func TestMatrixExec(t *testing.T) {
 	k = 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %f, found %f\n", ans[k], val)
 			}
 			k++
@@ -156,17 +152,13 @@ func TestMatrixExec(t *testing.T) {
 func TestMatrixCol(t *testing.T) {
 	m, _ := getMatrix[int](2, 2)
 
-	if _, err := m.GetCol(100); err == nil {
-		t.Error("error was not occurred")
-	}
-
-	m, _ = m.GetCol(0)
+	m = m.GetCol(0)
 
 	ans := []int{1, 3}
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++
@@ -177,17 +169,13 @@ func TestMatrixCol(t *testing.T) {
 func TestMatrixRow(t *testing.T) {
 	m, _ := getMatrix[int](2, 2)
 
-	if _, err := m.GetRow(100); err == nil {
-		t.Error("error was not occurred")
-	}
-
-	m, _ = m.GetRow(0)
+	m = m.GetRow(0)
 
 	ans := []int{1, 2}
 	k := 0
 	for i := 0; i < m.size.Rows; i++ {
 		for j := 0; j < m.size.Cols; j++ {
-			if val, _ := m.Get(i, j); val != ans[k] {
+			if val := m.Get(i, j); val != ans[k] {
 				t.Errorf("invalid value. expected %d, found %d\n", ans[k], val)
 			}
 			k++

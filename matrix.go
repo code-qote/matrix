@@ -52,21 +52,27 @@ func NewVector[T int | float64](dimension int) *Vector[T] {
 	}
 }
 
-func (m *Matrix[T]) Get(row int, col int) (T, error) {
-	if !m.validIndex(row, col) {
-		return 0, errors.New("index is out of array")
-	}
-
-	return m.array[row][col], nil
+func (m *Matrix[T]) Rows() int {
+	return m.size.Rows
 }
 
-func (m *Matrix[T]) Set(row int, col int, val T) error {
+func (m *Matrix[T]) Cols() int {
+	return m.size.Cols
+}
+
+func (m *Matrix[T]) Get(row int, col int) T {
 	if !m.validIndex(row, col) {
-		return errors.New("index is out of array")
+		panic("index is out of array")
+	}
+
+	return m.array[row][col]
+}
+
+func (m *Matrix[T]) Set(row int, col int, val T) {
+	if !m.validIndex(row, col) {
+		panic("index is out of array")
 	}
 	m.array[row][col] = val
-
-	return nil
 }
 
 func (m *Matrix[T]) validIndex(row int, col int) bool {
@@ -113,6 +119,38 @@ func (m *Matrix[T]) ScalarMultiplication(val T) *Matrix[T] {
 	}
 
 	return &res
+}
+
+func (m *Matrix[T]) Dot(other *Matrix[T]) (*Matrix[T], error) {
+	if m.size.Rows != other.size.Rows || m.size.Cols != other.size.Cols {
+		return nil, errors.New("different sizes")
+	}
+
+	res, _ := NewMatrix[T](m.size.Rows, 1)
+
+	for i := 0; i < m.size.Rows; i++ {
+		var s T = 0
+		for j := 0; j < m.size.Cols; j++ {
+			s += m.Get(i, j) * other.Get(i, j)
+		}
+		res.Set(i, 0, s)
+	}
+
+	return res, nil
+}
+
+func (v *Vector[T]) Dot(other *Vector[T]) (T, error) {
+	if v.size.Rows != other.size.Rows {
+		return 0, errors.New("different sizes")
+	}
+
+	var s T = 0
+
+	for i := 0; i < v.size.Rows; i++ {
+		s += v.Get(i, 0) * other.Get(i, 0)
+	}
+
+	return s, nil
 }
 
 func (m *Matrix[T]) Add(other *Matrix[T]) (*Matrix[T], error) {
@@ -180,9 +218,9 @@ func (m *Matrix[T]) Exec(f func(x T) T, col int) (*Matrix[T], error) {
 	return &res, nil
 }
 
-func (m *Matrix[T]) GetRow(row int) (*Matrix[T], error) {
+func (m *Matrix[T]) GetRow(row int) *Matrix[T] {
 	if !m.validRow(row) {
-		return nil, errors.New("row is out of array")
+		panic("row is out of array")
 	}
 
 	res, _ := NewMatrix[T](1, m.size.Cols)
@@ -190,12 +228,12 @@ func (m *Matrix[T]) GetRow(row int) (*Matrix[T], error) {
 		res.array[0][i] = m.array[row][i]
 	}
 
-	return res, nil
+	return res
 }
 
-func (m *Matrix[T]) GetCol(col int) (*Matrix[T], error) {
+func (m *Matrix[T]) GetCol(col int) *Matrix[T] {
 	if !m.validCol(col) {
-		return nil, errors.New("col is out of array")
+		panic("col is out of array")
 	}
 
 	res, _ := NewMatrix[T](m.size.Rows, 1)
@@ -203,5 +241,5 @@ func (m *Matrix[T]) GetCol(col int) (*Matrix[T], error) {
 		res.array[i][0] = m.array[i][col]
 	}
 
-	return res, nil
+	return res
 }
